@@ -1,0 +1,24 @@
+Kafka:
+  BootstrapServers: your_kafka_bootstrap_servers
+  ClientId": your_client_id
+ElasticSearch:
+  Index: permission_Challenge
+Serilog:
+  MinimumLevel:
+    Default: Information
+    Override:
+     Microsoft: Error
+     System: Error
+  WriteTo:
+  - Name: Elasticsearch
+    Args:
+      nodeUris: http://10.20.8.226:9200
+      typeName: ui_event
+      indexFormat: permission_Challenge
+  - Name: Console
+    Args:
+      outputTemplate: "{Timestamp:MM-dd HH:mm:ss.fff} | {Level:u4} | {SourceContext} | {Message:lj}{NewLine}{Exception}"
+      theme: "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console"
+  Enrich:
+  - FromLogContext
+  - WithThreadId
